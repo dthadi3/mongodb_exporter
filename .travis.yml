@@ -1,3 +1,7 @@
+arch:
+  - amd64
+  - ppc64le
+  
 dist: xenial
 language: go
 
@@ -58,9 +62,21 @@ jobs:
     - stage: build
       script:
         - make check-vendor-synced style build
+    - stage: build
+      script:
+        - make check-vendor-synced style build
+      arch: ppc64le
 
     - stage: deploy
       script: skip
+      deploy:
+        provider: script
+        script: make community-release
+        on:
+          tags: true
+    - stage: deploy
+      script: skip
+      arch: ppc64le
       deploy:
         provider: script
         script: make community-release
